@@ -7,9 +7,14 @@
 
 ## Enable BT 
 ```
-echo "power on" | bluetoothctl
-echo "agent on" | bluetoothctl
-echo "default-agent" | bluetoothctl
-echo "pairable on" | bluetoothctl
-echo "discoverable on" | bluetoothctl
-```
+bluetoothctl <<EOF
+$(sleep 1)
+power on
+$(sleep 1)
+agent on
+$(sleep 1)
+default-agent
+$(sleep 1)
+scan on
+$(sleep 20)
+EOF
