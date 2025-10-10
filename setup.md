@@ -15,6 +15,8 @@ agent on
 $(sleep 1)
 default-agent
 $(sleep 1)
-scan on
+pairable on
+$(sleep 1)
+discoverable on
 $(sleep 20)
 EOF
