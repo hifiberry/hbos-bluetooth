@@ -64,5 +64,5 @@ class ConfigFileManager:
         self.logger.info(f"Bluetooth capability: {self.capability}")
         self.logger.info(f"Discoverable: {self.discoverable}")
         self.logger.info(f"Discoverable timeout: {self.discoverable_timeout}")
-        self.logger.info(f"Pairable: {self.discoverable}")
-        self.logger.info(f"Pairable timeout: {self.discoverable_timeout}")
+        self.logger.info(f"Pairable: {self.pairable}")
+        self.logger.info(f"Pairable timeout: {self.pairable_timeout}")
