@@ -6,4 +6,8 @@ then
 	exit 1
 fi
 
-cp . /opt/hbos-bluetooth-service
+cp -r . /opt/hbos-bluetooth-service
+cp ./hbos-bluetooth.service 
+
+rm /etc/systemd/system/hbos-bluetooth.service
+cp hbos-bluetooth.service /etc/systemd/system
