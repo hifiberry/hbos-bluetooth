@@ -2,3 +2,4 @@
 set -e
 systemctl stop hbos-bluetooth.service || true
 systemctl disable hbos-bluetooth.service || true
+rm -rf /opt/hbos-bluetooth-service
