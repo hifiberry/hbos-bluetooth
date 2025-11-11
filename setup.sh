@@ -11,8 +11,8 @@ then
 fi
 
 echo "Stopping old service. (if there is any)"
-systemctl disable hbos-bluetooth.service > /dev/null
-systemctl stop hbos-bluetooth.service > /dev/null
+systemctl disable hbos-bluetooth.service > /dev/null || true
+systemctl stop hbos-bluetooth.service > /dev/null || true
 echo "Successfully stopped old service. (if there was any)"
 
 echo "Removing old project files from $installation_path"
@@ -24,7 +24,7 @@ cp -r . $installation_path > /dev/null
 echo "Successfully copied new files into $installation_path."
 
 echo "Removing old service file. (if there is any)"
-rm /etc/systemd/system/hbos-bluetooth.service > /dev/null
+rm /etc/systemd/system/hbos-bluetooth.service > /dev/null || true
 echo "Successfully removed old service file. (if there was any)"
 
 echo "Copying new service file."
