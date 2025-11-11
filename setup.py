@@ -3,7 +3,7 @@ import os
 
 # Read version from version module
 def get_version():
-    version_file = os.path.join(os.path.dirname(__file__), 'hbos-bluetooth-service', '_version.py')
+    version_file = os.path.join(os.path.dirname(__file__), 'hbos_bluetooth_service', '_version.py')
     with open(version_file, 'r') as f:
         for line in f:
             if line.startswith('__version__'):
@@ -35,7 +35,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "hbos-bluetooth=hbos-bluetooth-service.main:main",
+            "hbos-bluetooth=hbos_bluetooth_service.main:main",
         ],
     },
     classifiers=[
