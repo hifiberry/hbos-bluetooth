@@ -1,6 +1,8 @@
 import dbus
 import dbus.service
 from .ConfigFileManager import ConfigFileManager
+import requests
+import time
 
 class Agent(dbus.service.Object):
     BUS_NAME = "org.bluez"
@@ -106,9 +108,34 @@ class Agent(dbus.service.Object):
     """
     @dbus.service.method(AGENT_IFACE, in_signature="o", out_signature="u")
     def RequestPasskey(self, device):
-        print("RequestPasskey (%s)" % (device))
+        print("RequestPasskey (%s)" % device)
         self.set_trusted(device)
-        passkey = input("Enter passkey: ")
+
+        # Polling the local API
+        timeout = 120  # seconds
+        interval = 0.5  # seconds
+        elapsed = 0
+
+        passkey = None
+        while elapsed < timeout:
+            try:
+                response = requests.get("http://localhost:1081/api/v1/bluetooth/passkey")
+                data = response.json()
+                passkey = data.get("passkey")
+                
+                if passkey is not None:
+                    break  # Got a passkey, stop polling
+            except Exception as e:
+                print(f"Error fetching passkey: {e}")
+
+            time.sleep(interval)
+            elapsed += interval
+
+        if passkey is None:
+            # fallback if passkey was never set
+            passkey = 000000
+
+        print(f"Using passkey: {passkey}")
         return dbus.UInt32(passkey)
 
     """
