@@ -1,10 +1,12 @@
 import dbus
 import dbus.service
+from .ConfigFileManager import ConfigFileManager
 
 class Agent(dbus.service.Object):
     BUS_NAME = "org.bluez"
     AGENT_IFACE = "org.bluez.Agent1"
     DEVICE_IFACE = "org.bluez.Device1"
+    config_file_manager = ConfigFileManager()
 
     """
     Initialize a new BlueZ Bluetooth Agent object.
@@ -160,6 +162,7 @@ class Agent(dbus.service.Object):
     @dbus.service.method(AGENT_IFACE, in_signature="ou", out_signature="")
     def RequestConfirmation(self, device, passkey):
         print("RequestConfirmation (%s, %06d)" % (device, passkey))
+        self.config_file_manager.set_config_value("Bluetooth", "passkey", str(passkey));
         self.set_trusted(device)
         return
 
