@@ -10,7 +10,7 @@ class ConfigFileManager:
 
     def __init__(self):
         # Set up logger
-        self.logger = logging.getLogger("hbos-bluetooth-service")
+        self.logger = logging.getLogger("hifiberry-bluetooth")
         self.logger.setLevel(logging.DEBUG)
         if not self.logger.handlers:
             handler = logging.StreamHandler(sys.stdout)

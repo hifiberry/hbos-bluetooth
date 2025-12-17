@@ -3,7 +3,7 @@ import os
 
 # Read version from version module
 def get_version():
-    version_file = os.path.join(os.path.dirname(__file__), 'hbos_bluetooth_service', '_version.py')
+    version_file = os.path.join(os.path.dirname(__file__), 'hifiberry_bluetooth', '_version.py')
     with open(version_file, 'r') as f:
         for line in f:
             if line.startswith('__version__'):
@@ -15,7 +15,7 @@ with open(os.path.join(os.path.dirname(__file__), "requirements.txt")) as f:
     requirements = [line.strip() for line in f.readlines() if line.strip() and not line.startswith("#")]
 
 setup(
-    name="hbos-bluetooth-service",
+    name="hifiberry-bluetooth",
     version=get_version(),
     description="HiFiBerry Bluetooth Service",
     long_description="HiFiBerry Bluetooth Service, that manages all the incomming Bluetooth connections. "
@@ -27,15 +27,15 @@ setup(
     install_requires=requirements,
     data_files=[
         ('/usr/lib/systemd/system', [
-            'systemd/hbos-bluetooth.service'
+            'systemd/hifiberry-bluetooth.service'
         ]),
         ('/usr/share/man/man1', [
-            'man/hbos-bluetooth.1'
+            'man/hifiberry-bluetooth.1'
         ]),
     ],
     entry_points={
         "console_scripts": [
-            "hbos-bluetooth=hbos_bluetooth_service.main:main",
+            "hifiberry-bluetooth=hifiberry_bluetooth.main:main",
         ],
     },
     classifiers=[

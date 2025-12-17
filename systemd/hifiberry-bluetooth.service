@@ -1,9 +1,9 @@
 [Unit]
-Description=HBOS Bluetooth Service
+Description=Hifiberry Bluetooth
 After=bluetooth.service
 
 [Service]
-ExecStart=/usr/bin/hbos-bluetooth
+ExecStart=/usr/bin/hifiberry-bluetooth
 Restart=always
 User=root
 

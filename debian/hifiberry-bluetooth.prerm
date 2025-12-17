@@ -5,9 +5,9 @@ case "$1" in
     remove|purge)
         # Stop and disable the service
         if command -v systemctl >/dev/null 2>&1; then
-            # Stop and disable hbos-bluetooth service
-            if systemctl is-active --quiet hbos-bluetooth.service; then
-                systemctl stop hbos-bluetooth.service
+            # Stop and disable hifiberry-bluetooth service
+            if systemctl is-active --quiet hifiberry-bluetooth.service; then
+                systemctl stop hifiberry-bluetooth.service
             fi
 
             # Reload systemd daemon

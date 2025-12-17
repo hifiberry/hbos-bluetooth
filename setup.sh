@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-installation_path="/opt/hbos-bluetooth-service"
+installation_path="/opt/hifiberry-bluetooth"
 
 set -e
 
@@ -11,8 +11,8 @@ then
 fi
 
 echo "Stopping old service. (if there is any)"
-systemctl disable hbos-bluetooth.service > /dev/null || true
-systemctl stop hbos-bluetooth.service > /dev/null || true
+systemctl disable hifiberry-bluetooth.service > /dev/null || true
+systemctl stop hifiberry-bluetooth.service > /dev/null || true
 echo "Successfully stopped old service. (if there was any)"
 
 echo "Removing old project files from $installation_path"
@@ -24,11 +24,11 @@ cp -r . $installation_path > /dev/null
 echo "Successfully copied new files into $installation_path."
 
 echo "Removing old service file. (if there is any)"
-rm /etc/systemd/system/hbos-bluetooth.service > /dev/null || true
+rm /etc/systemd/system/hifiberry-bluetooth.service > /dev/null || true
 echo "Successfully removed old service file. (if there was any)"
 
 echo "Copying new service file."
-cp ./hbos-bluetooth.service /etc/systemd/system > /dev/null
+cp ./hifiberry-bluetooth.service /etc/systemd/system > /dev/null
 echo "Successfully copied new service file."
 
 echo "Installing dependencies..."
@@ -41,6 +41,6 @@ echo "Dependencies installed"
 
 
 echo "Starting service."
-systemctl enable hbos-bluetooth.service > /dev/null
-systemctl start hbos-bluetooth.service > /dev/null
+systemctl enable hifiberry-bluetooth.service > /dev/null
+systemctl start hifiberry-bluetooth.service > /dev/null
 echo "Successfully started service."

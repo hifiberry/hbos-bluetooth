@@ -8,12 +8,12 @@ case "$1" in
             # Reload systemd daemon to recognize new service
             systemctl daemon-reload
             
-            # Enable the hbos-bluetooth service for automatic startup
-            systemctl enable hbos-bluetooth.service
+            # Enable the hifiberry-bluetooth service for automatic startup
+            systemctl enable hifiberry-bluetooth.service
             
-            # Start the hbos-bluetooth service if not already running
-            if ! systemctl is-active --quiet hbos-bluetooth.service; then
-                systemctl start hbos-bluetooth.service
+            # Start the hifiberry-bluetooth service if not already running
+            if ! systemctl is-active --quiet hifiberry-bluetooth.service; then
+                systemctl start hifiberry-bluetooth.service
             fi
             
             echo "HiFiBerry Bluetooth Service has been enabled and started."

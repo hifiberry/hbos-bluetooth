@@ -1,4 +1,4 @@
-Source: hbos-bluetooth
+Source: hifiberry-bluetooth
 Section: python
 Priority: optional
 Maintainer: HiFiBerry <support@hifiberry.com>
@@ -9,7 +9,7 @@ Build-Depends: debhelper-compat (= 13),
 Standards-Version: 4.1.4
 Homepage: https://www.hifiberry.com/
 
-Package: hbos-bluetooth
+Package: hifiberry-bluetooth
 Architecture: all
 Depends: ${python3:Depends}, ${misc:Depends}, systemd, libspa-0.2-bluetooth
 Description: HiFiBerry bluetooth configuration scripts

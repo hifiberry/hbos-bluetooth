@@ -1,4 +1,4 @@
-hbos-bluetooth (1.0.0) stable; urgency=medium
+hifiberry-bluetooth (1.0.0) stable; urgency=medium
 
   * Initial release of HiFiBerry Bluetooth Service.
     Manages incoming Bluetooth connections and integrates with BlueZ using its

@@ -1,11 +1,11 @@
 # Config
 
 ## Syntax
-**hbos-bluetooth** uses the [toml](https://toml.io/en/) format.
+**hifiberry-bluetooth** uses the [toml](https://toml.io/en/) format.
 
 
 ## Location
-**hbos-bluetooth** creates the config file for you.
+**hifiberry-bluetooth** creates the config file for you.
 The file can be found under `~/.config/hifiberry/bluetooth.conf`.
 
 
