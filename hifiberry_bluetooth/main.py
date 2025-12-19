@@ -24,7 +24,7 @@ bus = dbus.SystemBus()
 mainloop = GLib.MainLoop()
 
 
-def properties_changed(interface, changed, invalidated):
+def properties_changed(interface, changed, invalidated, path=None):
     if interface == Adapter.ADAPTER_IFACE and "Discoverable" in changed:
         if not changed["Discoverable"]:
             config_file_manager.logger.info(
