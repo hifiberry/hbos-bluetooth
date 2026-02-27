@@ -18,6 +18,17 @@ case "$1" in
             
             echo "HiFiBerry Bluetooth Service has been enabled and started."
         fi
+
+        # Register systemd permissions via configserver drop-in
+        mkdir -p /etc/configserver/conf.d
+        cat > /etc/configserver/conf.d/hifiberry-bluetooth.json <<'DROPEOF'
+{
+    "systemd": {
+        "hifiberry-bluetooth": "all"
+    }
+}
+DROPEOF
+        echo "Configserver drop-in installed for hifiberry-bluetooth."
         ;;
     
     abort-upgrade|abort-remove|abort-deconfigure)

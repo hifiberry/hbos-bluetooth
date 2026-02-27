@@ -15,6 +15,9 @@ case "$1" in
             
             echo "HiFiBerry Bluetooth Service has been stopped and disabled."
         fi
+
+        # Remove configserver drop-in
+        rm -f /etc/configserver/conf.d/hifiberry-bluetooth.json
         ;;
     
     upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)

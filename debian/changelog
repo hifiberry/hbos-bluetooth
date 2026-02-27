@@ -1,3 +1,10 @@
+hifiberry-bluetooth (1.0.1) stable; urgency=medium
+
+  * Add configserver drop-in for systemd permissions (/etc/configserver/conf.d/)
+  * Remove drop-in on package removal
+
+ -- HiFiBerry <support@hifiberry.com>  Thu, 27 Feb 2026 17:00:00 +0000
+
 hifiberry-bluetooth (1.0.0) stable; urgency=medium
 
   * Initial release of HiFiBerry Bluetooth Service.
