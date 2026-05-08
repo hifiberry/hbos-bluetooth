@@ -1,10 +1,16 @@
 [Unit]
 Description=Hifiberry Bluetooth
+Requires=bluetooth.service
 After=bluetooth.service
 
 [Service]
+# Best-effort rfkill unblock so the adapter is reachable on first boot.
+# "-" prefix swallows failures (rfkill not installed, already unblocked, …)
+# so we never block service startup on it.
+ExecStartPre=-/usr/sbin/rfkill unblock bluetooth
 ExecStart=/usr/bin/hifiberry-bluetooth
-Restart=always
+Restart=on-failure
+RestartSec=5
 User=root
 
 [Install]

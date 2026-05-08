@@ -1,3 +1,19 @@
+hifiberry-bluetooth (1.0.3) stable; urgency=medium
+
+  * Power on the adapter explicitly at startup with retry around bluez's
+    boot-time "Not Powered" / "off-blocked" race. Previously the service
+    crashed on first boot when bluez had not finished its rfkill dance,
+    fell into systemd's StartLimit, and only recovered when manually
+    restarted later. Adapter setup now waits up to 30 s for the radio.
+  * systemd unit: best-effort `rfkill unblock bluetooth` ExecStartPre as
+    a safety net. Failure ignored (rfkill may not be installed).
+  * systemd unit: Requires=bluetooth.service so we follow bluez's lifecycle.
+  * systemd unit: switch to Restart=on-failure with RestartSec=5 to avoid
+    busy-restart loops on bugs while still recovering from transient errors.
+  * Bump _version.py to match changelog (was stuck at 1.0.1 in 1.0.2).
+
+ -- HiFiBerry <support@hifiberry.com>  Fri, 08 May 2026 19:30:00 +0200
+
 hifiberry-bluetooth (1.0.2) stable; urgency=medium
 
   * Add nginx include file for Bluetooth Audio API proxy (/etc/nginx/hifiberry-api.d/)
