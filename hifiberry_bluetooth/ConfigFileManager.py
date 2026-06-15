@@ -57,13 +57,19 @@ class ConfigFileManager:
 
         self.capability = self.config.get("Bluetooth", "capability", fallback="KeyboardDisplay")
 
-        self.discoverable = self.config.getboolean("Bluetooth", "discoverable", fallback="True")
-        self.discoverable_timeout = self.config.getint("Bluetooth", "discoverable_timeout", fallback="0")
+        # Use correctly-typed fallbacks. configparser's getboolean()/getint()
+        # only coerce values present in the file; a missing key returns the
+        # fallback verbatim. With string fallbacks ("True"/"0") a missing key
+        # leaves these as strings, which then breaks the typed DBus Set() calls
+        # in Adapter.py (e.g. Pairable expects a boolean -> InvalidSignature,
+        # crashing the service into a restart loop).
+        self.discoverable = self.config.getboolean("Bluetooth", "discoverable", fallback=True)
+        self.discoverable_timeout = self.config.getint("Bluetooth", "discoverable_timeout", fallback=0)
 
-        self.pairable = self.config.getboolean("Bluetooth", "pairable", fallback="True")
-        self.pairable_timeout = self.config.getint("Bluetooth", "pairable_timeout", fallback="0")
-        
-        self.passkey = self.config.getint("Bluetooth", "passkey", fallback="000000")
+        self.pairable = self.config.getboolean("Bluetooth", "pairable", fallback=True)
+        self.pairable_timeout = self.config.getint("Bluetooth", "pairable_timeout", fallback=0)
+
+        self.passkey = self.config.getint("Bluetooth", "passkey", fallback=0)
 
         self.logger.info(f"Bluetooth capability: {self.capability}")
         self.logger.info(f"Discoverable: {self.discoverable}")
