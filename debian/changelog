@@ -1,3 +1,19 @@
+hifiberry-bluetooth (1.0.4) stable; urgency=medium
+
+  * ConfigFileManager: use correctly-typed fallbacks for the boolean/integer
+    keys (fallback=True / 0 instead of "True" / "0" / "000000"). configparser's
+    getboolean()/getint() only coerce values present in the file; a missing key
+    returned the string fallback verbatim, so e.g. `pairable` became the string
+    "True". That string reached the typed DBus Set('Pairable', ...) in Adapter
+    and raised InvalidSignature, crashing the service into a restart loop until
+    systemd's limiter gave up. Triggered when the WebUI wrote a partial
+    bluetooth.conf.
+  * Adapter: wrap Discoverable and Pairable in dbus.Boolean(...), matching the
+    existing dbus.UInt32(...) usage, so a mistyped value can never reach DBus.
+    (hifiberry/acr#12, hbos-bluetooth PR #1)
+
+ -- HiFiBerry <info@hifiberry.com>  Mon, 15 Jun 2026 12:30:00 +0000
+
 hifiberry-bluetooth (1.0.3) stable; urgency=medium
 
   * Power on the adapter explicitly at startup with retry around bluez's
