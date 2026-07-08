@@ -1,3 +1,10 @@
+hifiberry-bluetooth (1.0.5) stable; urgency=medium
+
+  * postinst: restart config-server when it is running so a post-boot
+    install is picked up and the WebUI can control the service.
+
+ -- HiFiBerry <support@hifiberry.com>  Wed, 08 Jul 2026 18:30:00 +0000
+
 hifiberry-bluetooth (1.0.4) stable; urgency=medium
 
   * ConfigFileManager: use correctly-typed fallbacks for the boolean/integer
