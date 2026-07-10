@@ -26,7 +26,7 @@ you just need to install some extra packages.
 
 For the latest guide, 
 please read the installation section on the 
-[project's README](https://github.com/hifiberry/hifiberry-os/tree/hbosng?tab=readme-ov-file#installation).
+[project's README](https://github.com/hifiberry/hifiberry-os/tree/main?tab=readme-ov-file#installation).
 
 4. **Remove soft block from bluetooth**
 Sometimes the Raspberry Pi has a soft-block applied for bluetooth.
