@@ -1,3 +1,12 @@
+hifiberry-bluetooth (1.0.6) stable; urgency=medium
+
+  * Ship the ACR player definition as /etc/audiocontrol/players.d/bluetooth.json.
+    The definition used to live in audiocontrol.json, which meant the package
+    that provides bluetooth and the file that defines the player were owned by
+    different packages.
+
+ -- HiFiBerry <support@hifiberry.com>  Mon, 03 Aug 2026 12:51:45 +0000
+
 hifiberry-bluetooth (1.0.5) stable; urgency=medium
 
   * postinst: restart config-server when it is running so a post-boot

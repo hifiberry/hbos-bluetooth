@@ -1,1 +1,2 @@
 debian/hifiberry-btaudio.nginx etc/nginx/hifiberry-api.d/
+debian/bluetooth.json etc/audiocontrol/players.d/
