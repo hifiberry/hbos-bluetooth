@@ -12,6 +12,7 @@ Homepage: https://www.hifiberry.com/
 Package: hifiberry-bluetooth
 Architecture: all
 Depends: ${python3:Depends}, ${misc:Depends}, systemd, libspa-0.2-bluetooth
+Breaks: hifiberry-audiocontrol (<< 0.8.8)
 Description: HiFiBerry bluetooth configuration scripts
   Manages how Bluetooth connections will work. Set the different options using
   either the web interface of hbos or using the config file.

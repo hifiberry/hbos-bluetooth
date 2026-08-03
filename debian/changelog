@@ -1,3 +1,14 @@
+hifiberry-bluetooth (1.0.7) stable; urgency=medium
+
+  * Add Breaks: hifiberry-audiocontrol (<< 0.8.8). Older audiocontrol still
+    carries this player's inline entry in audiocontrol.json; combined with
+    the /etc/audiocontrol/players.d/bluetooth.json conffile shipped since
+    1.0.6, that duplicates into two BluetoothPlayerController instances
+    against the same BlueZ D-Bus interface, since audiocontrol merges
+    includes without deduplicating against the legacy players array.
+
+ -- HiFiBerry <support@hifiberry.com>  Mon, 03 Aug 2026 14:59:28 +0000
+
 hifiberry-bluetooth (1.0.6) stable; urgency=medium
 
   * Ship the ACR player definition as /etc/audiocontrol/players.d/bluetooth.json.
