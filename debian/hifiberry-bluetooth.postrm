@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+    purge)
+        # Remove the JustWorksRepairing setting added by our postinst, but only
+        # when it is still the exact pair of lines we wrote. Anything edited by
+        # the administrator since then is left untouched.
+        BLUEZ_MAIN_CONF=/etc/bluetooth/main.conf
+        if [ -f "$BLUEZ_MAIN_CONF" ]; then
+            sed -i '/^# Added by hifiberry-bluetooth (see JustWorksRepairing in bluetoothd(8))$/{
+N
+/\n[[:space:]]*JustWorksRepairing[[:space:]]*=[[:space:]]*always[[:space:]]*$/d
+}' "$BLUEZ_MAIN_CONF"
+        fi
+        ;;
+
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
