@@ -30,6 +30,41 @@ case "$1" in
 DROPEOF
         echo "Configserver drop-in installed for hifiberry-bluetooth."
 
+        # BlueZ refuses to re-pair a device it still holds a link key for
+        # unless JustWorksRepairing is relaxed. The upstream default has been
+        # "never" since BlueZ 5.51.
+        #
+        # That default is a poor fit for a speaker. This service pairs with
+        # capability NoInputNoOutput, so every bond is an unauthenticated
+        # "Just Works" bond already, and the adapter stays discoverable and
+        # pairable indefinitely. "never" therefore buys no real protection
+        # here; it only turns the common "the phone forgot the speaker"
+        # case into a hard failure, with no user-visible error and no way out
+        # except removing the device over SSH or from the WebUI.
+        #
+        # bluetoothd reads /etc/bluetooth/main.conf only - it has no conf.d
+        # drop-in support - so the setting has to go into the file shipped by
+        # bluez. Only add it when no JustWorksRepairing setting is active, so
+        # an explicit choice made by the administrator is never overwritten.
+        BLUEZ_MAIN_CONF=/etc/bluetooth/main.conf
+        JWR_MARKER="# Added by hifiberry-bluetooth (see JustWorksRepairing in bluetoothd(8))"
+        if [ -f "$BLUEZ_MAIN_CONF" ] && \
+           ! grep -qE '^[[:space:]]*JustWorksRepairing[[:space:]]*=' "$BLUEZ_MAIN_CONF"; then
+            if grep -qE '^[[:space:]]*\[General\]' "$BLUEZ_MAIN_CONF"; then
+                sed -i "0,/^[[:space:]]*\[General\]/s||&\n$JWR_MARKER\nJustWorksRepairing = always|" \
+                    "$BLUEZ_MAIN_CONF"
+            else
+                printf '\n[General]\n%s\nJustWorksRepairing = always\n' \
+                    "$JWR_MARKER" >> "$BLUEZ_MAIN_CONF"
+            fi
+            echo "Enabled JustWorksRepairing in $BLUEZ_MAIN_CONF."
+
+            # Only meaningful on a running system; no-op during image builds.
+            if [ -d /run/systemd/system ] && systemctl is-active --quiet bluetooth 2>/dev/null; then
+                systemctl restart bluetooth >/dev/null 2>&1 || true
+            fi
+        fi
+
         # config-server caches conf.d systemd-permission drop-ins at startup; when
         # this package is installed onto a running system, restart it so the WebUI
         # can control this service. No-op during image builds (config-server not up).
