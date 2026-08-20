@@ -1,3 +1,18 @@
+hifiberry-bluetooth (1.0.8) stable; urgency=medium
+
+  * Set JustWorksRepairing = always in /etc/bluetooth/main.conf on configure.
+    BlueZ has defaulted this to "never" since 5.51, which makes bluetoothd
+    reject any re-pairing attempt from a device it still holds a link key
+    for. That is the common case when a phone is reset, reinstalled, or
+    simply told to forget the speaker: the phone offers a fresh pairing, the
+    speaker refuses it, and neither side reports a useful error. The only
+    way out is removing the device from the speaker over SSH or the WebUI.
+    The setting is only added when no JustWorksRepairing value is active, so
+    an explicit choice by the administrator is preserved, and it is removed
+    again on purge.
+
+ -- HiFiBerry <support@hifiberry.com>  Thu, 20 Aug 2026 13:00:00 +0000
+
 hifiberry-bluetooth (1.0.7) stable; urgency=medium
 
   * Add Breaks: hifiberry-audiocontrol (<< 0.8.8). Older audiocontrol still
