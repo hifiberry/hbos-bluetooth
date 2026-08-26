@@ -1,3 +1,16 @@
+hifiberry-bluetooth (1.0.8) stable; urgency=medium
+
+  * Depend on bluez. hifiberry-bluetooth.service declares
+    Requires=bluetooth.service and After=bluetooth.service, but
+    bluetooth.service is shipped by bluez, which nothing in the dependency
+    chain pulled in -- bluez was only a Recommends of
+    hifiberry-pipewire-configs. Where it was not installed for some other
+    reason the unit fails to start on a dependency that does not exist.
+    Every working install so far got bluez by luck rather than by
+    declaration.
+
+ -- HiFiBerry <support@hifiberry.com>  Wed, 26 Aug 2026 19:30:00 +0000
+
 hifiberry-bluetooth (1.0.7) stable; urgency=medium
 
   * Add Breaks: hifiberry-audiocontrol (<< 0.8.8). Older audiocontrol still
