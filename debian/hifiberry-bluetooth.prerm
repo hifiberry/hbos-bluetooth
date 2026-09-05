@@ -7,11 +7,11 @@ case "$1" in
         if command -v systemctl >/dev/null 2>&1; then
             # Stop and disable hifiberry-bluetooth service
             if systemctl is-active --quiet hifiberry-bluetooth.service; then
-                systemctl stop hifiberry-bluetooth.service
+                systemctl stop hifiberry-bluetooth.service || true
             fi
 
             # Reload systemd daemon
-            systemctl daemon-reload
+            systemctl daemon-reload || true
             
             echo "HiFiBerry Bluetooth Service has been stopped and disabled."
         fi
@@ -20,7 +20,7 @@ case "$1" in
         rm -f /etc/configserver/conf.d/hifiberry-bluetooth.json
         ;;
     
-    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear|deconfigure)
         ;;
     
     *)
