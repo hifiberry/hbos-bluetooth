@@ -1,3 +1,35 @@
+hifiberry-bluetooth (1.0.9) stable; urgency=medium
+
+  * Handle the deconfigure argument in prerm. dpkg calls
+    "prerm deconfigure in-favour-of <package> <version>" when a package has to
+    be temporarily deconfigured; the case statement covered remove, purge and
+    the upgrade/abort arguments, so deconfigure fell through to the catch-all
+    branch, printed "prerm called with unknown argument `deconfigure'" and
+    exited 1.
+    The trigger is hifiberry-audiocontrol's Breaks: hifiberry-bluetooth
+    (<< 1.0.6): unpacking audiocontrol 0.18.0 on a machine carrying an older
+    hifiberry-bluetooth makes dpkg deconfigure this package first. Observed on
+    a Debian 13 install with 1.0.2 installed, in the middle of a 458-package
+    upgrade -- the failing prerm aborted the whole transaction mid-unpack and
+    left 456 packages unpacked but unconfigured, glibc, systemd and the kernel
+    among them. raspberrypi-sys-mods was caught in the same window with its
+    /etc/sudoers.d/010_pi-nopasswd moved aside and not yet replaced, so sudo
+    demanded a password that recovery did not have.
+    Deconfiguration is not removal -- the service keeps running and the
+    configserver drop-in stays in place -- so the existing no-op branch is the
+    correct handling.
+    Note that dpkg runs the prerm of the *installed* version, so this only
+    protects deconfigures from 1.0.9 onwards. Units still at << 1.0.6 carry
+    the broken script and hit the abort regardless of what this package ships;
+    closing that off for already-deployed devices needs audiocontrol's Breaks
+    re-scoped so apt upgrades hifiberry-bluetooth instead of deconfiguring it.
+  * Do not let systemctl failures abort a removal. Under set -e the unguarded
+    systemctl stop and daemon-reload in the remove branch made a hung daemon
+    or an unavailable systemd fail the prerm, aborting the surrounding dpkg
+    run in the same way. Both are now tolerant of failure.
+
+ -- HiFiBerry <support@hifiberry.com>  Sat, 05 Sep 2026 09:45:00 +0000
+
 hifiberry-bluetooth (1.0.8) stable; urgency=medium
 
   * Depend on bluez. hifiberry-bluetooth.service declares
