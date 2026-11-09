@@ -96,3 +96,41 @@ disabled and it will stay in pairable mode forever.
 Valid options:
 - `pairable_timeout=0`
 - `pairable_timeout=160`
+
+
+## BlueZ settings applied by the package
+
+Most settings above are read by this service and pushed to BlueZ over D-Bus.
+One setting cannot be handled that way, because it is read by `bluetoothd`
+itself at startup rather than exposed as an adapter property.
+
+### JustWorksRepairing
+
+Since BlueZ 5.51 the built-in default is `never`, which makes `bluetoothd`
+reject a pairing attempt coming from a device it still holds a link key for.
+On a speaker this is reached easily: reset a phone, reinstall it, or simply
+tell it to forget the speaker, and it will offer a fresh pairing that the
+speaker then refuses. Neither side shows a meaningful error, and the only
+way to recover is to remove the device from the speaker over SSH or from the
+WebUI.
+
+The default makes sense for a laptop or a phone, where bonds are
+authenticated and a user can confirm on screen. It does not fit an appliance
+that pairs with `capability=NoInputNoOutput` - every bond is an
+unauthenticated "Just Works" bond already - and that stays discoverable and
+pairable indefinitely. `never` blocks no attacker that the configuration
+does not already allow in.
+
+`bluetoothd` reads `/etc/bluetooth/main.conf` only, with no `conf.d` drop-in
+support, so the package writes the setting into that file on configure:
+
+```ini
+[General]
+# Added by hifiberry-bluetooth (see JustWorksRepairing in bluetoothd(8))
+JustWorksRepairing = always
+```
+
+The block is only added when no `JustWorksRepairing` value is already active,
+so setting it by hand - to `confirm` or back to `never` - takes precedence and
+survives upgrades. Purging the package removes the two lines again, as long as
+they have not been edited.
