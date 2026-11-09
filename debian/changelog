@@ -1,3 +1,17 @@
+hifiberry-bluetooth (1.0.10) stable; urgency=medium
+
+  * Allow re-pairing of already-bonded devices. BlueZ has defaulted
+    JustWorksRepairing to "never" since 5.51, so a phone that had forgotten
+    the speaker could not pair again and reported a wrong PIN; the only way
+    out was removing the device on the speaker. postinst now sets
+    JustWorksRepairing = always in /etc/bluetooth/main.conf, unless an active
+    value is already set there, and postrm removes it again on purge. This
+    service pairs as NoInputNoOutput and stays pairable, so every bond is
+    already an unauthenticated Just Works bond. Diagnosed and contributed by
+    gugueU (#2, #5).
+
+ -- HiFiBerry <support@hifiberry.com>  Mon, 09 Nov 2026 09:50:57 +0000
+
 hifiberry-bluetooth (1.0.9) stable; urgency=medium
 
   * Handle the deconfigure argument in prerm. dpkg calls
