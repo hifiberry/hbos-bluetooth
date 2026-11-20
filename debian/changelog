@@ -1,3 +1,16 @@
+hifiberry-bluetooth (1.1.0) stable; urgency=medium
+
+  * Pairing mode works again after the web interface turns it on. The
+    interface saves the config three times in a row, and each save set the
+    adapter properties again before the previous change had finished;
+    bluetoothd rejected the overlapping changes as busy, which ended the
+    config watcher, so later changes were ignored until a restart. Saves
+    in quick succession are now applied once, a busy adapter is retried,
+    and a failure is logged instead of stopping the watcher. Seen with a
+    Realtek USB Bluetooth stick, whose mode changes take longer.
+
+ -- HiFiBerry <support@hifiberry.com>  Fri, 20 Nov 2026 10:11:36 +0000
+
 hifiberry-bluetooth (1.0.10) stable; urgency=medium
 
   * Allow re-pairing of already-bonded devices. BlueZ has defaulted

@@ -68,17 +68,43 @@ class Adapter:
                 )
             time.sleep(1.0)
 
+    # How often, and how far apart, a property change that bluetoothd
+    # rejects as busy is tried again. A mode change goes through the
+    # kernel, which on some controllers (a Realtek USB stick with LE
+    # advertising running) takes long enough that a second change sent
+    # right after the first is rejected with "Busy".
+    BUSY_RETRIES = 10
+    BUSY_DELAY = 0.3
+
+    @staticmethod
+    def _is_busy(error):
+        name = error.get_dbus_name() if hasattr(error, "get_dbus_name") else ""
+        if name == "org.bluez.Error.Busy":
+            return True
+        return name == "org.bluez.Error.Failed" and "Busy" in str(error)
+
+    def _set(self, name, value):
+        """Set one adapter property, retrying while bluetoothd is busy."""
+        for attempt in range(self.BUSY_RETRIES + 1):
+            try:
+                self.adapter_props.Set(self.ADAPTER_IFACE, name, value)
+                return
+            except dbus.exceptions.DBusException as e:
+                if not self._is_busy(e) or attempt == self.BUSY_RETRIES:
+                    raise
+                logging.info("[Adapter] %s: adapter busy, retrying", name)
+                time.sleep(self.BUSY_DELAY)
+
     def _apply_config(self):
         # Wrap booleans with explicit DBus typing (like dbus.UInt32 below), so a
         # non-bool value can never reach DBus with the wrong signature.
-        self.adapter_props.Set(self.ADAPTER_IFACE, 'Discoverable',
-                               dbus.Boolean(self.config_file_manager.discoverable))
-        self.adapter_props.Set(self.ADAPTER_IFACE, 'DiscoverableTimeout',
-                               dbus.UInt32(self.config_file_manager.discoverable_timeout))
-        self.adapter_props.Set(self.ADAPTER_IFACE, 'Pairable',
-                               dbus.Boolean(self.config_file_manager.pairable))
-        self.adapter_props.Set(self.ADAPTER_IFACE, 'PairableTimeout',
-                               dbus.UInt32(self.config_file_manager.pairable_timeout))
+        # bluetoothd answers a value the adapter already has without a mode
+        # change, so setting all four each time costs nothing.
+        self._set('Discoverable', dbus.Boolean(self.config_file_manager.discoverable))
+        self._set('DiscoverableTimeout',
+                  dbus.UInt32(self.config_file_manager.discoverable_timeout))
+        self._set('Pairable', dbus.Boolean(self.config_file_manager.pairable))
+        self._set('PairableTimeout', dbus.UInt32(self.config_file_manager.pairable_timeout))
 
     def update_properties(self):
         self.config_file_manager.load_config_values()
