@@ -1,4 +1,4 @@
-hifiberry-bluetooth (1.0.11) stable; urgency=medium
+hifiberry-bluetooth (1.1.0) stable; urgency=medium
 
   * Pairing mode works again after the web interface turns it on. The
     interface saves the config three times in a row, and each save set the
