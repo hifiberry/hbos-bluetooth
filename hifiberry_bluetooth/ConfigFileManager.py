@@ -70,6 +70,9 @@ class ConfigFileManager:
         self.pairable_timeout = self.config.getint("Bluetooth", "pairable_timeout", fallback=0)
 
         self.passkey = self.config.getint("Bluetooth", "passkey", fallback=0)
+        # The address of the adapter to use when there are several; empty for
+        # the first one, with the others left alone.
+        self.adapter = self.config.get("Bluetooth", "adapter", fallback="").strip().upper()
 
         self.logger.info(f"Bluetooth capability: {self.capability}")
         self.logger.info(f"Discoverable: {self.discoverable}")
@@ -77,6 +80,7 @@ class ConfigFileManager:
         self.logger.info(f"Pairable: {self.pairable}")
         self.logger.info(f"Pairable timeout: {self.pairable_timeout}")
         self.logger.info(f"Passkey: {self.passkey}")
+        self.logger.info(f"Adapter: {self.adapter or 'first'}")
 
     def set_config_value(self, section, key, value):
         try:

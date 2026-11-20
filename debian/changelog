@@ -1,3 +1,16 @@
+hifiberry-bluetooth (1.2.0) stable; urgency=medium
+
+  * A device with more than one Bluetooth adapter, such as the built-in
+    one and a USB stick, uses the one set as "adapter" in bluetooth.conf
+    and powers the others off, so phones see one device. Without the
+    setting, or while that adapter is missing, the first adapter is used
+    as before. The choice follows adapters being plugged in or out.
+  * The chosen adapter loses BlueZ's default suffix for a second adapter,
+    so a USB stick shows to phones as "<host>", not "<host> #2". A name
+    set by someone else is kept.
+
+ -- HiFiBerry <support@hifiberry.com>  Fri, 20 Nov 2026 10:29:15 +0000
+
 hifiberry-bluetooth (1.1.0) stable; urgency=medium
 
   * Pairing mode works again after the web interface turns it on. The
