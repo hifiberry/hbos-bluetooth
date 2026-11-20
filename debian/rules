@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
  
+# The tests in tests/ are pytest functions.
+export PYBUILD_TEST_PYTEST=1
+
 %:
 	dh $@ --buildsystem=pybuild
 
