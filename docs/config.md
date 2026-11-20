@@ -98,6 +98,24 @@ Valid options:
 - `pairable_timeout=160`
 
 
+### Adapter
+The Bluetooth adapter to use when there is more than one, for example the
+built-in one and a USB stick, by its address:
+
+```toml
+adapter=AA:BB:CC:DD:EE:FF
+```
+
+The chosen adapter is powered on and gets the settings above; every other
+adapter is powered off, so a phone sees one device. Devices are paired with
+an adapter, so after a change they have to be paired again.
+
+Without `adapter`, or when the chosen adapter is not there (a USB stick that
+is unplugged), the first adapter (`hci0`) is used and the others are left as
+they are. The choice is made again when an adapter is plugged in or out.
+`bluetoothctl list` shows the addresses.
+
+
 ## BlueZ settings applied by the package
 
 Most settings above are read by this service and pushed to BlueZ over D-Bus.

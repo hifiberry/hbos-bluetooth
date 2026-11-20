@@ -24,7 +24,15 @@ bus = dbus.SystemBus()
 mainloop = GLib.MainLoop()
 
 
+# Set in main(); the signal handlers below need it.
+adapter = None
+
+
 def properties_changed(interface, changed, invalidated, path=None):
+    # Only the chosen adapter's timeout ends pairing mode: one that is powered
+    # off because another was chosen reports Discoverable false as well.
+    if adapter is not None and path != adapter.path:
+        return
     if interface == Adapter.ADAPTER_IFACE and "Discoverable" in changed:
         if not changed["Discoverable"]:
             config_file_manager.logger.info(
@@ -42,7 +50,25 @@ def main():
     config_file_manager.logger.info(f"[Main] Agent registered with capability: {config_file_manager.capability}")
 
     # Initialize Adapter
+    global adapter
     adapter = Adapter()
+
+    # A USB adapter plugged in or out: choose again, so a configured stick is
+    # used as soon as it appears and the built-in one powered off.
+    def adapters_changed(path, interfaces):
+        if Adapter.ADAPTER_IFACE in interfaces:
+            try:
+                adapter.select()
+            except Exception:
+                config_file_manager.logger.exception("[Main] Choosing the adapter failed")
+
+    for signal in ("InterfacesAdded", "InterfacesRemoved"):
+        bus.add_signal_receiver(
+            adapters_changed,
+            dbus_interface="org.freedesktop.DBus.ObjectManager",
+            signal_name=signal,
+            bus_name=BUS_NAME,
+        )
 
     bus.add_signal_receiver(
         properties_changed,
